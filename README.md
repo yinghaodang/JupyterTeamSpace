@@ -8,15 +8,21 @@
 
 ``` bash
 # 编译镜像
-docker build -t reg.hdec.com/pdc/jupyterhub-for-team .
+docker build -t reg.hdec.com/pdc/jupyterhub-for-team:4.0.2-cuda12.3.2-ubuntu22 .
 ```
 
 ```bash
 # 启动容器
-docker run -d -v /home/jupyterhub:/home --restart always --shm-size 128g -p 8002:8000 -p 8003:22 -p 30000:30000 -p 30001:30001  -p 30002:30002 --gpus all reg.hdec.com/pdc/jupyterhub-for-team
+docker run -d -v ${user_data}:/home --restart always --shm-size 128g -p 8002:8000 --gpus all reg.hdec.com/pdc/jupyterhub-for-team
 ```
 
-至此，`jupyterhub`部署完成。`jupyterhub`运行在8000端口，其余端口用作调试。
+# docker-compose
+
+也可以使用`docker-compose`方式部署。详见, `jupyterhub.yml`.
+
+
+如果在`jupyterhub`里写Web服务，那么要多开一些端口。
+至此，`jupyterhub`部署完成。访问`http://${host_ip}:8002`即可
 
 ## 创建用户
 

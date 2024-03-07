@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  jupyterhub:
+    image: reg.hdec.com/pdc/jupyterhub-for-team:4.0.2-cuda12.3.2-ubuntu22
+    container_name: jupyterhub
+    restart: always
+    volumes:
+      - ${users_data}:/home
+      - ${jupyterhub_sqlite}:/jupyterhub
+    shm_size: 128g
+    ports:
+      - 8002:8000
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      - jupyterhub
+networks:
+  jupyterhub:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.30.1.0/24"  # Avoid IP collisions with other nodes
